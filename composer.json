@@ -1,0 +1,14 @@
+{
+    "name": "pleio/flow",
+    "description": "Connect Elgg backend to the Flow workflow system",
+    "type": "elgg-plugin",
+    "keywords": ["elgg", "plugin", "pleio"],
+    "license": "GPL-2.0-or-later",
+    "support": {
+        "source": "https://github.com/Pleio/mod_flow",
+        "issues": "https://github.com/Pleio/mod_flow/issues"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "dev-master"
+    }
+}
