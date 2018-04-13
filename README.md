@@ -1,0 +1,2 @@
+# Flow plugin
+This plugin connects an Elgg site to the [Flow](https://www.github.com/bartjkdp/flow) workflow system. After configuring the settings in `/admin/plugin_settings/flow` the plugin automatically creates new cases in Flow for newly created items on the Elgg site.
