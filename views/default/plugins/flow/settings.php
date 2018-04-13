@@ -2,7 +2,10 @@
 $settings = $vars["entity"];
 
 $options = [
-    "question" => "question"
+    "blog" => "blog",
+    "news" => "news",
+    "question" => "question",
+    "discussion" => "discussion"
 ];
 
 echo "<div>";
