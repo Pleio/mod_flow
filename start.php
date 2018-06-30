@@ -11,6 +11,12 @@ function flow_init() {
 }
 
 function flow_create_object($event, $object_type, $object) {
+    global $DISABLE_FLOW_LOGGING;
+
+    if ($DISABLE_FLOW_LOGGING) {
+        return;
+    }
+
     $url = elgg_get_plugin_setting('url', 'flow');
     $casetype = elgg_get_plugin_setting('casetype', 'flow');
     $token = elgg_get_plugin_setting('token', 'flow');
@@ -46,6 +52,7 @@ function flow_create_object($event, $object_type, $object) {
     try {
         $response = $client->request('POST', $url . "api/cases/", [
             'headers' => $headers,
+            'timeout' => 2,
             'json' => [
                 'casetype' => $casetype,
                 'name' => $object->title ?: elgg_echo('flow:no_title'),
@@ -60,7 +67,7 @@ function flow_create_object($event, $object_type, $object) {
             $object->flow_id = $body->id;
             $object->save();
         }
-    } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    } catch (Exception $e) {
         elgg_log("Could not write case to Flow: {$e->getMessage()}" , 'ERROR');
     }
 }
@@ -77,7 +84,11 @@ function flow_create_comment($event, $object_type, $object) {
         return;
     }
 
-    $client = new \GuzzleHttp\Client();
+    $client = new \GuzzleHttp\Client([
+        'request.options' => [
+            'exceptions' => false
+        ]
+    ]);
 
     $headers = [
         'Authorization' => "Token {$token}",
@@ -87,12 +98,13 @@ function flow_create_comment($event, $object_type, $object) {
     try {
         $response = $client->request('POST', $url . "api/caselogs/", [
             'headers' => $headers,
+            'timeout' => 2,
             'json' => [
                 'case' => $container->flow_id,
                 'event' => 'external_comment'
             ]
         ]);
-    } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    } catch (Exception $e) {
         elgg_log("Could not write comment to Flow: {$e->getMessage()}" , 'ERROR');
     }
 }
@@ -175,6 +187,8 @@ function flow_switch_user() {
 }
 
 function flow_add_comment($data) {
+    global $DISABLE_FLOW_LOGGING;
+
     if (!$data['description']) {
         http_response_code(400);
         echo json_encode([ 'error' => 'The variable description is not set.' ]);
@@ -194,12 +208,16 @@ function flow_add_comment($data) {
         exit();
     }
 
+    $DISABLE_FLOW_LOGGING = true;
+
     $comment = new ElggObject();
     $comment->subtype = ($container->getSubtype() === "question") ? "answer" : "comment";
     $comment->description = $data["description"];
     $comment->container_guid = $container->guid;
     $comment->access_id = $container->access_id;
     $comment->save();
+
+    $DISABLE_FLOW_LOGGING = false;
 
     echo json_encode([
         'error' => null,
