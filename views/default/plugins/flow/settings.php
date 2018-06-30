@@ -42,3 +42,12 @@ echo elgg_view("input/text", [
 ]);
 echo "<span class=\"elgg-subtext\">" . elgg_echo("flow:settings:casetype:explanation") . "</span>";
 echo "</div>";
+
+echo "<div>";
+echo "<label>" . elgg_echo("flow:settings:user_guid") . "</label>";
+echo elgg_view("input/text", [
+    "name" => "params[user_guid]",
+    "value" => $settings->user_guid
+]);
+echo "<span class=\"elgg-subtext\">" . elgg_echo("flow:settings:user_guid:explanation") . "</span>";
+echo "</div>";

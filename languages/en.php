@@ -7,6 +7,8 @@ $english = [
     'flow:settings:token' => 'Access token',
     'flow:settings:casetype' => 'Casetype ID',
     'flow:settings:casetype:explanation' => 'the casetype ID in Flow, e.g. 2',
+    'flow:settings:user_guid' => 'User GUID',
+    'flow:settings:user_guid:explanation' => 'the guid of the Elgg user that handles in name of flow, e.g. placing comments',
     'flow:no_title' => 'No title given'
 ];
 
