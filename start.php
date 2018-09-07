@@ -84,6 +84,8 @@ function flow_create_comment($event, $object_type, $object) {
         return;
     }
 
+    $owner = $object->getOwnerEntity();
+
     $client = new \GuzzleHttp\Client([
         'request.options' => [
             'exceptions' => false
@@ -96,12 +98,13 @@ function flow_create_comment($event, $object_type, $object) {
     ];
 
     try {
-        $response = $client->request('POST', $url . "api/caselogs/", [
+        $response = $client->request('POST', $url . "api/externalcomments/", [
             'headers' => $headers,
             'timeout' => 2,
             'json' => [
                 'case' => $container->flow_id,
-                'event' => 'external_comment'
+                'author' => $owner->name,
+                'description' => $object->description
             ]
         ]);
     } catch (Exception $e) {
