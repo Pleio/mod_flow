@@ -213,11 +213,16 @@ function flow_add_comment($data) {
 
     $DISABLE_FLOW_LOGGING = true;
 
+    $access_id = $container->access_id;
+    if ($container->access_id == ACCESS_PRIVATE) {
+        $access_id = ACCESS_LOGGED_IN;
+    }
+
     $comment = new ElggObject();
     $comment->subtype = ($container->getSubtype() === "question") ? "answer" : "comment";
     $comment->description = $data["description"];
     $comment->container_guid = $container->guid;
-    $comment->access_id = $container->access_id;
+    $comment->access_id = $access_id;
     $comment->save();
 
     $DISABLE_FLOW_LOGGING = false;
