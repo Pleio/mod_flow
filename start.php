@@ -225,6 +225,11 @@ function flow_add_comment($data) {
     $comment->access_id = $access_id;
     $comment->save();
 
+    update_entity_last_action($container->guid, $comment->time_created);
+
+    $view = "river/object/{$comment->subtype}/create";
+    add_to_river($view, 'create', elgg_get_logged_in_user_guid(), $comment->guid);
+
     $DISABLE_FLOW_LOGGING = false;
 
     echo json_encode([
