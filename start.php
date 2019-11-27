@@ -218,8 +218,15 @@ function flow_add_comment($data) {
         $access_id = ACCESS_LOGGED_IN;
     }
 
+    // Pleio template only uses subtype comment
+    if (elgg_is_active_plugin("pleio_template")) {
+        $subtype = "comment";
+    } else {
+        $subtype = ($container->getSubtype() === "question") ? "answer" : "comment";
+    }
+
     $comment = new ElggObject();
-    $comment->subtype = ($container->getSubtype() === "question") ? "answer" : "comment";
+    $comment->subtype = $subtype;
     $comment->description = $data["description"];
     $comment->container_guid = $container->guid;
     $comment->access_id = $access_id;
