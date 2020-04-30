@@ -52,7 +52,7 @@ function flow_create_object($event, $object_type, $object) {
     try {
         $response = $client->request('POST', $url . "api/cases/", [
             'headers' => $headers,
-            'timeout' => 2,
+            'timeout' => 7,
             'json' => [
                 'casetype' => $casetype,
                 'name' => $object->title ?: elgg_echo('flow:no_title'),
@@ -100,7 +100,7 @@ function flow_create_comment($event, $object_type, $object) {
     try {
         $response = $client->request('POST', $url . "api/externalcomments/", [
             'headers' => $headers,
-            'timeout' => 2,
+            'timeout' => 7,
             'json' => [
                 'case' => $container->flow_id,
                 'author' => $owner->name,
